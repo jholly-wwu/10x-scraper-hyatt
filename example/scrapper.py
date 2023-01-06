@@ -28,20 +28,12 @@ def main(args=None):
     driver.get("https://www.hyatt.com/en-US/explore-hotels?regionGroup=0-All&categories=0")
     WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, ".properties")))
 
-    driver.execute_script(
-        """
-        var properties = document.getElementsByClassName("property");
-        var propertyList = [];
-        for (var i = 0; i < properties.length; i++) {
-            propertyList[i] = {
-                "name" : properties.item(i).querySelector('a').textContent,
-                "link" : properties.item(i).querySelector('a').href,
-            };
-        }
-        console.log(propertyList);
-        alert("Fetched check console");
-        """
+    propertyList = driver.execute_script(
+        "var properties = document.getElementsByClassName('property');var propertyList = [];for (var i = 0; i < properties.length; i++) {propertyList[i] = {'name' : properties.item(i).querySelector('a').textContent,'link' : properties.item(i).querySelector('a').href,}}console.log(propertyList);return propertyList;"
     )
+    
+    # Once data is fetched from the url, then we make api hit here to store in our DB 
+    print(type(propertyList));
     sleep(100)
     
     return 
